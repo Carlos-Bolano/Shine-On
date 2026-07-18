@@ -1,0 +1,31 @@
+import { useEffect } from 'react';
+import { useRouter, useSegments } from 'expo-router';
+import { View, ActivityIndicator } from 'react-native';
+import { Colors } from '@/src/core/theme';
+import { Storage } from '@/src/core/storage/storage';
+
+export default function Index() {
+  const router = useRouter();
+  const segments = useSegments();
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      const settings = await Storage.getOnboardingSettings();
+      const inOnboarding = segments[0] === 'onboarding';
+
+      if (settings?.hasCompletedOnboarding) {
+        router.replace('/feed');
+      } else if (!inOnboarding) {
+        router.replace('/onboarding/welcome');
+      }
+    };
+
+    checkOnboarding();
+  }, [router, segments]);
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background.light }}>
+      <ActivityIndicator size="large" color={Colors.primary} />
+    </View>
+  );
+}
