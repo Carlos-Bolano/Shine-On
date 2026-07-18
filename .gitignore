@@ -3,8 +3,11 @@
 # dependencies
 node_modules/
 
+stitch/
+
 # Expo
 .expo/
+.expo/web/cache/
 dist/
 web-build/
 expo-env.d.ts
@@ -20,6 +23,7 @@ expo-env.d.ts
 
 # Metro
 .metro-health-check*
+.metro-cache/
 
 # debug
 npm-debug.*
