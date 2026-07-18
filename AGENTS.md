@@ -28,15 +28,14 @@
 
 ```text
 src/
-├── assets/                 # Fonts, vector icons, branding resources
 ├── core/                   # Shared infrastructure
 │   ├── theme/              # Design tokens, gradients, spacing, typography
 │   ├── storage/            # Local persistence abstraction (AsyncStorage)
 │   └── database/           # Interfaces, repositories, adapters
 ├── components/             # Pure atomic UI components
-│   ├── Button/
-│   ├── GradientView/
-│   └── Typography/
+│   ├── GradientBackground.tsx
+│   ├── PremiumButton.tsx
+│   └── Typography.tsx
 └── features/               # Self-contained product modules
     ├── onboarding/
     ├── feed/
@@ -73,7 +72,7 @@ src/
 ### Current Phase: Local Mock Engine
 
 - The app currently runs entirely on local structured data.
-- Use `src/core/database/mocks.ts` as the source of phrases and categories.
+- Use `src/core/database/mockData.ts` as the source of phrases and categories.
 - Persist onboarding settings, likes, and timing preferences locally with `AsyncStorage`.
 - Do not introduce network calls for core phrase flows in this phase.
 
@@ -87,9 +86,9 @@ src/
 
 ```ts
 export interface PhrasesRepository {
-  getPhrases(categories: string[]): Promise<Phrase[]>;
-  toggleLike(phraseId: string): Promise<void>;
   getCategories(): Promise<Category[]>;
+  getPhrases(categoryIds?: string[]): Promise<Phrase[]>;
+  toggleLike(phraseId: string): Promise<void>;
 }
 ```
 
@@ -146,9 +145,11 @@ export interface PhrasesRepository {
 interface Category {
   id: string;
   name: string;
-  color: string[];
   icon: string;
-  description: string;
+  colorLight: string;
+  colorDark: string;
+  iconColor: string;
+  gradients: string[];
 }
 ```
 
@@ -159,9 +160,10 @@ interface Phrase {
   id: string;
   text: string;
   author: string;
-  category_id: string;
-  created_at: string;
-  is_active: boolean;
+  categoryId: string;
+  createdAt: string;
+  isActive: boolean;
+  likes: number;
 }
 ```
 
