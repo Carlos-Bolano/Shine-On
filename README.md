@@ -1,50 +1,61 @@
-# Welcome to your Expo app 👋
+# Shine On
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Shine On es una app movil construida con Expo y React Native para entregar frases inspiradoras mediante una experiencia premium, emocional y minimalista.
 
-## Get started
+## Producto
 
-1. Install dependencies
+- Vibe visual: `Colorful Calm`
+- Plataforma objetivo actual: Android
+- Navegacion: `expo-router`
+- Fuente de verdad funcional: `shine-on-product.md`
+- Fase actual de datos: mocks locales + persistencia con `AsyncStorage`
 
-   ```bash
-   npm install
-   ```
+## Arquitectura
 
-2. Start the app
+El repositorio sigue una arquitectura modular orientada a features:
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+app/                    # Routing con Expo Router
+src/components/         # UI reutilizable y presentacional
+src/core/               # Infraestructura compartida
+src/features/           # Modulos de producto
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Regla principal:
 
-## Learn more
+- `app/` enruta
+- `src/features/` implementa producto
+- `src/core/` centraliza datos, storage, tema y contratos
 
-To learn more about developing your project with Expo, look at the following resources:
+## Features del MVP
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Onboarding secuencial
+- Feed vertical full-screen
+- Customizer 9:16 para stories
+- Notificaciones locales por categorias y rango horario
 
-## Join the community
+## Stack
 
-Join our community of developers creating universal apps.
+- Expo SDK `54`
+- React Native + TypeScript
+- `expo-router`
+- `expo-linear-gradient`
+- `expo-notifications`
+- `expo-media-library`
+- `react-native-view-shot`
+- `expo-haptics`
+- `@react-native-async-storage/async-storage`
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Scripts
+
+```bash
+npm install
+npm run android
+npm run lint
+```
+
+## Documentos clave
+
+- `shine-on-product.md`: especificacion funcional y tecnica
+- `AGENTS.md`: reglas operativas del repositorio
+- `commit-plan.md`: estrategia para reconstruccion y agrupacion de commits por intencion
