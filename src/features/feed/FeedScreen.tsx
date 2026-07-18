@@ -220,9 +220,11 @@ const FeedItem: React.FC<FeedItemProps> = ({
         </View>
 
         <View style={styles.buttonGroup}>
-          <View style={styles.buttonCircle}>
-            <MaterialIcons name="share" size={32} color={Colors.slate[900]} />
-          </View>
+          <TouchableOpacity onPress={onCustomize}>
+            <View style={styles.buttonCircle}>
+              <MaterialIcons name="share" size={32} color={Colors.slate[900]} />
+            </View>
+          </TouchableOpacity>
           <Typography size="xs" weight="bold" color={Colors.slate[700]}>
             Share
           </Typography>
