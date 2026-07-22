@@ -74,6 +74,7 @@ export default function ProfileScreen() {
                 name="name"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
+                    autoFocus={true}
                     label="Name"
                     placeholder="Enter your name"
                     value={value}
