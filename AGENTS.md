@@ -2,197 +2,196 @@
 
 ## Source of Truth
 
-- Base every implementation decision on `shine-on-product.md`.
-- Preserve the product identity: premium, minimal, emotional, and "Colorful Calm".
-- Treat this repository as a mobile-first Expo app. The product vision is iOS + Android, but the current project prioritizes Android and does not need web support.
+- Base every implementation decision strictly on `shine-on-product.md`[cite: 1].
+- Preserve the product identity: premium, minimal, emotional, personal sanctuary, and "Colorful Calm"[cite: 1].
+- Treat this repository as a mobile-first Expo app. The product vision targets iOS + Android, prioritizing Android local development without web support[cite: 1].
 
 ## Mandatory Technical Rules
 
 ### Expo Version
 
-- Always use **Expo SDK 54.0.0**.
+- Always use **Expo SDK 54.0.0**[cite: 1].
 - Read versioned docs from https://docs.expo.dev/versions/v54.0.0/ before adding or changing framework-specific code.
 
 ### Architecture Principles
 
-1. **Feature-Driven Modular Architecture**: Organize code by feature under `src/features/`.
-2. **Repository Pattern**: All phrase/category data access must go through `PhrasesRepository`.
+1. **Feature-Driven Modular Architecture**: Organize code strictly by feature under `src/features/`[cite: 1].
+2. **Repository Pattern**: All quote, category, activity, and user data access must go through `QuotesRepository`[cite: 1].
 3. **Strict Separation of Concerns**:
-   - UI components are presentational and reusable.
-   - Business logic belongs in features, services, and hooks.
-   - Components must not access storage, notifications, APIs, or databases directly.
-4. **SOLID Principles**: Prefer small, maintainable units with clear responsibilities.
-5. **Hook-Based Composition**: Expose use cases through hooks such as `usePhrases` and `useOnboardingSettings`.
+   - UI components are presentational and reusable[cite: 1].
+   - Business logic belongs exclusively in features, services, and custom hooks[cite: 1].
+   - Components must not access storage, notifications, APIs, or databases directly[cite: 1].
+4. **SOLID Principles**: Prefer small, maintainable units with single responsibilities[cite: 1].
+5. **Hook-Based Composition**: Expose use cases through hooks such as `useQuotes`, `useUserProfile`, and `useOnboardingSettings`[cite: 1].
 
 ## Directory Structure
 
-```text
 src/
-├── core/                   # Shared infrastructure
-│   ├── theme/              # Design tokens, gradients, spacing, typography
-│   ├── storage/            # Local persistence abstraction (AsyncStorage)
-│   └── database/           # Interfaces, repositories, adapters
-├── components/             # Pure atomic UI components
-│   ├── GradientBackground.tsx
-│   ├── PremiumButton.tsx
-│   └── Typography.tsx
-└── features/               # Self-contained product modules
-    ├── onboarding/
-    ├── feed/
-    ├── customizer/
-    └── notifications/
-```
+├── assets/ # Typography, vector icons, branding assets[cite: 1]
+├── core/ # Shared infrastructure[cite: 1]
+│ ├── theme/ # Design tokens, gradients, spacing, typography[cite: 1]
+│ ├── storage/ # Local persistence abstraction (AsyncStorage / MMKV)[cite: 1]
+│ └── database/ # Interfaces, repositories, adapters, and mock data[cite: 1]
+├── components/ # Pure atomic UI components (Button, Typography, GradientBackground)[cite: 1]
+└── features/ # Self-contained product modules[cite: 1]
+├── onboarding/ # Welcome, user name/email capture, categories, active hours[cite: 1]
+├── home/ # Dashboard, Quote of the Day, Daily Light Map (GitHub-style streak)[cite: 1]
+├── feed/ # Vertical paging feed with dynamic QuoteStyles[cite: 1]
+├── customizer/ # 9:16 Canvas (editing existing quotes & blank canvas creations)[cite: 1]
+├── collection/ # Private sanctuary (Saved quotes & My Creations)[cite: 1]
+├── settings/ # Modal sheet (language toggle, notifications, profile)[cite: 1]
+└── notifications/ # Local notification scheduler and triggers[cite: 1]
 
-## Product Identity
+## Product Identity & Navigation
 
-### Brand
+### Brand & Visual Language
 
-- Product name: **Shine On**
-- Visual vibe: **Colorful Calm**
-- Experience target: premium, polished, soft, emotional, and highly tactile
-- Primary accent: `#ee5f2b`
-- Selected category highlight: bright orange around `#F35C2B`
+- Product name: **Shine On**[cite: 1]
+- Visual vibe: **Colorful Calm**[cite: 1]
+- Experience target: personal sanctuary, warm, polished, soft, emotional, tactile[cite: 1]
+- Primary accent: `#ee5f2b` / `#F35C2B`[cite: 1]
+- Gradients: Use tokens defined in `src/core/theme/`[cite: 1]
+- Prioritize smooth state-driven transitions and tactile feedback[cite: 1]
+
+### Navigation Layout
+
+- **Top Navbar Header:** Features logo '✨ Shine On' and gear icon opening the Settings Modal sheet[cite: 1].
+- **Bottom Navigation Bar (Floating Capsule):**
+  1. `Home`: Dashboard with greeting, Quote of the Day, and Daily Light Map[cite: 1].
+  2. `Feed`: Vertical infinite scroll[cite: 1].
+  3. `My Collection`: Private library (Saved & My Creations)[cite: 1].
 
 ### Typography
 
-- UI text uses **Plus Jakarta Sans**
-- Quotes and emotional copy use **Instrument Serif**
-- Load fonts at app startup with `expo-font`
-- Prefer native italic variants instead of simulated italics
+- UI text uses **Plus Jakarta Sans**[cite: 1]
+- Quotes and emotional copy use **Instrument Serif** or **Cormorant**[cite: 1]
+- Load fonts at app startup with `expo-font`[cite: 1]
 
-### Visual Language
+## Data Strategy (Local-First)
 
-- Use gradients defined in `src/core/theme/index.ts`
-- Prioritize smooth state-driven transitions and subtle animated feedback
-- Design for full-screen, immersive compositions with generous spacing
-- Keep visuals minimal, but not plain
+### Current Phase: Local Engine
 
-## Data Strategy
+- The app operates **Local-First** with no mandatory registration or remote authentication[cite: 1].
+- Source catalog data lives in `src/core/database/mockData.ts`[cite: 1].
+- Persist user profile, custom quotes, likes, settings, and daily activity logs locally[cite: 1].
 
-### Current Phase: Local Mock Engine
+### Strict Bilingual Rules (i18n)
 
-- The app currently runs entirely on local structured data.
-- Use `src/core/database/mockData.ts` as the source of phrases and categories.
-- Persist onboarding settings, likes, and timing preferences locally with `AsyncStorage`.
-- Do not introduce network calls for core phrase flows in this phase.
+- All catalog quotes **MUST** provide both Spanish (`es`) and English (`en`) texts (`QuoteText`)[cite: 1].
+- The active UI language is controlled in `UserProfile` (`es` | `en`) and toggled via the Settings Modal[cite: 1].
 
-### Future Phase: Supabase Adapter
+### Repository Contract (`QuotesRepository`)
 
-- Keep data flows repository-driven so the app can swap from mocks to Supabase without changing screens.
-- Future integrations must implement the same `PhrasesRepository` contract.
-- Plan for RLS-compatible models and adapters, but do not couple the UI to Supabase now.
-
-### Repository Contract
-
-```ts
-export interface PhrasesRepository {
-  getCategories(): Promise<Category[]>;
-  getPhrases(categoryIds?: string[]): Promise<Phrase[]>;
-  toggleLike(phraseId: string): Promise<void>;
+export interface QuotesRepository {
+getCategories(): Promise<Category[]>;
+getQuotes(categoryIds?: string[]): Promise<Quote[]>;
+getQuoteOfTheDay(): Promise<Quote>;
+toggleLike(quoteId: string): Promise<void>;
+saveCustomQuote(quote: Omit<Quote, 'createdAt' | 'id'>): Promise<Quote>;
+getSavedQuotes(): Promise<Quote[]>;
+getUserCreations(): Promise<Quote[]>;
+getDailyActivity(): Promise<DailyActivity[]>;
+recordActivityToday(): Promise<void>;
 }
-```
 
-## Feature Requirements
+## Feature Implementation Details
 
-### 1. Onboarding
+### 1. Onboarding (4 Steps)
 
-- Flow order: Welcome -> Category Selection -> Rhythm Configuration -> Notification Permission
-- Welcome screen must use a dynamic gradient background, a minimal sun illustration, and the copy: `"A ray of light for your day ✨"`
-- Category selection is multi-select with the six MVP categories: `Self-Love`, `Growth`, `Calm`, `Focus`, `Confidence`, `Gratitude`
-- Selected cards should show animated scale feedback, a bright orange border, and a subtle confirmation checkmark
-- Rhythm configuration must let the user choose `1` to `5` notifications per day and a safe time range
-- On completion, request notification permissions and persist `hasCompletedOnboarding: true`
-- Persist selected categories, frequency, and time range locally
-- Use haptic feedback on key interactions
+1. **Welcome:** Atmosphere screen (`"A ray of light for your day ✨"`)[cite: 1].
+2. **User Personalization:**
+   - **Name (Mandatory):** Used for personalized greetings and Story signatures[cite: 1].
+   - **Email (Optional):** Lightweight newsletter opt-in field without password friction[cite: 1].
+3. **Category Selection:** Multi-select grid (`Self-Love`, `Growth`, `Calm`, `Focus`, `Confidence`, `Gratitude`)[cite: 1].
+4. **Active Hours & Notifications:** Frequency (1–5 times/day) and active time window (e.g., 08:00 AM - 09:00 PM)[cite: 1]. Request permissions and persist `hasCompletedOnboarding: true`[cite: 1].
 
-### 2. Feed
+### 2. Home / Dashboard
 
-- Use a vertical full-screen list with `pagingEnabled`
-- Show one phrase per screen, centered and highly readable
-- Adapt the background gradient to the phrase category
-- Include a floating action bar for:
-  - `Like / Me toco`
-  - `Hazla tuya / Customize`
-  - `Compartir / Share`
-- Likes must persist locally in the current phase
-- Keep feed rendering smooth and optimized for 60fps behavior
+- **Dynamic Greeting:** Time-based greeting with user's name (e.g., _"Good morning, Carlos"_)[cite: 1].
+- **Quote of the Day (Hero Card):** Featured card with special gradient, rotating every 24 hours[cite: 1]. Includes quick action to share or customize[cite: 1].
+- **Daily Light Map (Retention Tracker):** Horizontal activity graph (GitHub commit-style heatmap) using warm orange dots (`#F35C2B`) tracking active reading days[cite: 1].
 
-### 3. Customizer
+### 3. Feed
 
-- Build a 9:16 preview canvas sized for Stories-style export
-- The canvas should include the Shine On logo, decorative quote mark, phrase, author, and dynamic signature
-- Allow editing of the signature text in real time
-- Provide background presets: `Dopamine`, `Grainy`, `Cloudy`, `Pastel`, `Silk`
-- Provide font options: `Jakarta Sans`, `Modern Serif`, `Classic Mono`
-- Export with `react-native-view-shot`
-- Save to gallery with `expo-media-library`, preferably inside a `Shine On` album
-- Allow native sharing after capture/export
+- Full-screen vertical list with `pagingEnabled` or optimized `FlashList`[cite: 1].
+- Dynamically apply each quote's individual `QuoteStyle` (font family, text alignment, colors, background tokens)[cite: 1].
+- Floating action bar: `Like (Me tocó)`[cite: 1], `Make It Yours (Style)`[cite: 1], and `Share`[cite: 1].
 
-### 4. Notifications
+### 4. Customizer ("Make It Yours")
 
-- Use `expo-notifications` compatible with Expo SDK 54
-- Schedule local notifications based on selected categories, daily frequency, and time range
-- Divide the selected time range into even intervals and place notification times within that range
-- Notification content must match the user's selected categories
-- Notification triggers must include an explicit `type`, such as `type: 'daily'`
-- When required by the SDK/platform behavior, include Android-safe scheduling fields like channel configuration
+- 9:16 Story canvas container rendering logo, quote, author, and signature (_"shared by [Name]"_)[cite: 1].
+- **Dual Mode:**
+  1. _Edit Mode:_ Modifies pre-existing quotes for Story export[cite: 1].
+  2. _Create Mode (Blank Canvas):_ Opened via FAB in My Collection[cite: 1]. Allows writing custom text, formatting styling, and saving locally with `isCustom: true`[cite: 1].
+- Export high-resolution images via `react-native-view-shot`[cite: 1].
+
+### 5. My Collection (Sanctuary)
+
+- Top segmented control tabs: `Saved Quotes` vs. `My Creations`[cite: 1].
+- Floating Action Button (FAB) at bottom-right to write a new custom quote[cite: 1].
+
+### 6. Settings Modal
+
+- Modal sheet overlay triggered from top header[cite: 1].
+- Contains Language switcher (`es` / `en`), Notification frequency, Active Hours, and Profile editor[cite: 1].
 
 ## Data Models
 
-### Category
+### QuoteStyle
 
-```ts
-interface Category {
-  id: string;
-  name: string;
-  icon: string;
-  colorLight: string;
-  colorDark: string;
-  iconColor: string;
-  gradients: string[];
+export interface QuoteStyle {
+fontFamily: 'JakartaSans' | 'ModernSerif' | 'Cormorant';
+fontSize: 'sm' | 'md' | 'lg';
+textAlign: 'left' | 'center' | 'right';
+textColor: string;
+backgroundColor: string;
+showQuotes: boolean;
+showLogo: boolean;
 }
-```
 
-### Phrase
+### Quote
 
-```ts
-interface Phrase {
-  id: string;
-  text: string;
-  author: string;
-  categoryId: string;
-  createdAt: string;
-  isActive: boolean;
-  likes: number;
+export interface QuoteText {
+en: string;
+es: string;
 }
-```
 
-## Non-Functional Requirements
+export interface Quote {
+id: string;
+text: QuoteText;
+author: string;
+categoryId: string;
+style: QuoteStyle;
+isCustom?: boolean;
+createdAt: string;
+}
 
-- Maintain smooth, premium-feeling interactions and transitions
-- Target 60fps visual performance for the vertical feed
-- Use `expo-haptics` for important presses, selections, and confirmation moments
-- Use `SafeAreaView` from `react-native-safe-area-context` for Android notch-safe layouts
-- Avoid unnecessary re-renders in full-screen feed or animated surfaces
-- Keep UI components pure and portable
+### UserProfile
 
-## Dependencies to Prefer
+export interface UserProfile {
+name: string;
+email?: string;
+hasCompletedOnboarding: boolean;
+selectedCategories: string[];
+notificationFrequency: number;
+activeHours: {
+from: string;
+until: string;
+};
+language: 'es' | 'en';
+}
 
-- `expo-router` for routing
-- `expo-linear-gradient` for backgrounds
-- `@react-native-async-storage/async-storage` for persistence
-- `expo-notifications` for local notifications
-- `expo-media-library` for saving images
-- `react-native-view-shot` for capture/export
-- `expo-haptics` for tactile feedback
-- `@expo-google-fonts/plus-jakarta-sans`
-- `@expo-google-fonts/instrument-serif`
-- `expo-font` for font loading
+### DailyActivity
 
-## Implementation Guardrails
+export interface DailyActivity {
+date: string; // 'YYYY-MM-DD'
+count: number;
+}
 
-- Do not add direct network logic inside screens or presentational components
-- Do not bypass repositories with ad hoc data reads
-- Do not introduce web-only patterns or styling assumptions
-- Keep code aligned with the repository's feature-first structure
-- When the spec and existing project behavior differ, prefer the documented project constraints needed for the current codebase while preserving the product intent
+## Non-Functional Guardrails
+
+- Target smooth 60fps visual performance[cite: 1].
+- Use `expo-haptics` for tactile feedback on selections and actions[cite: 1].
+- Use `SafeAreaView` from `react-native-safe-area-context` for Android notch-safe layouts[cite: 1].
+- Never add direct network logic inside UI screens or presentational components[cite: 1].
+- Never bypass repository interfaces[cite: 1].
