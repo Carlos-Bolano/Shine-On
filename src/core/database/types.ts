@@ -24,4 +24,6 @@ export interface OnboardingSettings {
   frequency: number;
   startTime: string;
   endTime: string;
+  userName?: string;
+  userEmail?: string;
 }

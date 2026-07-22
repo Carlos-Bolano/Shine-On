@@ -59,10 +59,10 @@ export default function CategoriesScreen() {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-            <MaterialIcons name="chevron-left" size={32} color={Colors.slate[900]} />
+            <MaterialIcons name="arrow-back" size={24} color={Colors.slate[900]} />
           </TouchableOpacity>
           <Typography size="sm" weight="bold" color={Colors.slate[600]} style={styles.stepText}>
-            Step 2 of 4
+            Step 3 of 4
           </Typography>
           <View style={{ width: 48 }} />
         </View>
@@ -109,8 +109,8 @@ export default function CategoriesScreen() {
         <View style={styles.bottomBar}>
           <View style={styles.indicators}>
             <View style={styles.indicator} />
-            <View style={[styles.indicator, styles.activeIndicator]} />
             <View style={styles.indicator} />
+            <View style={[styles.indicator, styles.activeIndicator]} />
             <View style={styles.indicator} />
           </View>
           <PremiumButton title="Continue Journey" onPress={handleContinue} disabled={selected.length === 0} />
@@ -136,9 +136,16 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.sm,
   },
   backButton: {
-    width: 48,
-    height: 48,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.4)",
     justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   stepText: {
     letterSpacing: 2,

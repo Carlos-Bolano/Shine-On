@@ -37,9 +37,10 @@ export default function WelcomeScreen() {
               <View style={[styles.indicator, styles.activeIndicator]} />
               <View style={styles.indicator} />
               <View style={styles.indicator} />
+              <View style={styles.indicator} />
             </View>
 
-            <PremiumButton title="Continue" onPress={() => router.push("/onboarding/categories")} />
+            <PremiumButton title="Continue" onPress={() => router.push("/onboarding/profile")} />
           </View>
         </View>
       </SafeAreaView>
