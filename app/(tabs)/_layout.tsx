@@ -12,10 +12,9 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: Colors.background?.light ?? "#fff",
           borderTopColor: "rgba(238, 95, 43, 0.24)",
-          borderRadius: 20,
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          height: 50,
         },
       }}
     >

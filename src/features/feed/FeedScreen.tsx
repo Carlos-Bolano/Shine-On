@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -31,6 +32,7 @@ interface FeedItemProps {
   onCustomize: () => void;
   handleReset: () => void;
   isActive: boolean;
+  itemHeight: number;
 }
 
 const FeedItem: React.FC<FeedItemProps> = ({
@@ -41,6 +43,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
   onCustomize,
   handleReset,
   isActive,
+  itemHeight,
 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
@@ -145,7 +148,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
   });
 
   return (
-    <GradientBackground colors={category.gradients} style={styles.itemContainer}>
+    <GradientBackground colors={category.gradients} style={[styles.itemContainer, { height: itemHeight }]}>
       <TouchableOpacity activeOpacity={1} onPress={handleDoubleTap} style={styles.itemTouchable}>
         <Animated.View
           style={[
@@ -198,7 +201,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
             <View style={[styles.buttonCircle, isLiked && styles.buttonCircleActive]}>
               <MaterialIcons
                 name={isLiked ? "favorite" : "favorite-border"}
-                size={32}
+                size={24}
                 color={isLiked ? "#fff" : Colors.slate[900]}
               />
             </View>
@@ -211,7 +214,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
         <View style={styles.buttonGroup}>
           <TouchableOpacity onPress={onCustomize}>
             <View style={styles.buttonCircle}>
-              <MaterialIcons name="style" size={32} color={Colors.slate[900]} />
+              <MaterialIcons name="style" size={24} color={Colors.slate[900]} />
             </View>
           </TouchableOpacity>
           <Typography size="xs" weight="bold" color={Colors.slate[700]}>
@@ -222,7 +225,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
         <View style={styles.buttonGroup}>
           <TouchableOpacity onPress={onCustomize}>
             <View style={styles.buttonCircle}>
-              <MaterialIcons name="share" size={32} color={Colors.slate[900]} />
+              <MaterialIcons name="share" size={24} color={Colors.slate[900]} />
             </View>
           </TouchableOpacity>
           <Typography size="xs" weight="bold" color={Colors.slate[700]}>
@@ -233,7 +236,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
         <View style={styles.buttonGroup}>
           <TouchableOpacity onPress={() => handleReset()}>
             <View style={styles.buttonCircle}>
-              <MaterialIcons name="delete" size={32} color={Colors.slate[900]} />
+              <MaterialIcons name="delete" size={24} color={Colors.slate[900]} />
             </View>
           </TouchableOpacity>
           <Typography size="xs" weight="bold" color={Colors.slate[700]}>
@@ -247,6 +250,8 @@ const FeedItem: React.FC<FeedItemProps> = ({
 
 export default function FeedScreen() {
   const router = useRouter();
+  const tabBarHeight = useBottomTabBarHeight();
+  const itemHeight = SCREEN_HEIGHT - tabBarHeight;
   const [phrases, setPhrases] = useState<Phrase[]>([]);
   const [likedPhrases, setLikedPhrases] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -315,9 +320,10 @@ export default function FeedScreen() {
         onCustomize={() => handleCustomize(item)}
         handleReset={handleReset}
         isActive={index === activeIndex}
+        itemHeight={itemHeight}
       />
     ),
-    [likedPhrases, activeIndex],
+    [likedPhrases, activeIndex, itemHeight],
   );
 
   const keyExtractor = useCallback((item: Phrase) => item.id, []);
@@ -389,7 +395,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   authorDivider: {
-    width: 32,
+    width: 24,
     height: 2,
     backgroundColor: Colors.primary,
     opacity: 0.4,
@@ -409,7 +415,7 @@ const styles = StyleSheet.create({
   sideButtons: {
     position: "absolute",
     right: Spacing.md,
-    bottom: Spacing.xxl * 2,
+    bottom: Spacing.xl,
     gap: Spacing.lg,
   },
   buttonGroup: {
@@ -417,9 +423,9 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
   },
   buttonCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 46,
+    height: 46,
+    borderRadius: 50,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     justifyContent: "center",
     alignItems: "center",
