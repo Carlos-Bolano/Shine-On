@@ -42,7 +42,7 @@ export default function ProfileScreen() {
       userName: data.name,
       userEmail: data.email || undefined,
     });
-    router.push("/onboarding/categories");
+    router.push("/categories");
   };
 
   return (

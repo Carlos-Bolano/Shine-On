@@ -288,7 +288,7 @@ export default function FeedScreen() {
 
   const handleReset = async () => {
     await Storage.clearOnboardingSettings();
-    router.push("/onboarding/welcome");
+    router.push("/welcome");
   };
 
   const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {

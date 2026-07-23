@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { useRouter, useSegments } from 'expo-router';
-import { View, ActivityIndicator } from 'react-native';
-import { Colors } from '@/src/core/theme';
-import { Storage } from '@/src/core/storage/storage';
+import { Storage } from "@/src/core/storage/storage";
+import { Colors } from "@/src/core/theme";
+import { useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
@@ -11,12 +11,12 @@ export default function Index() {
   useEffect(() => {
     const checkOnboarding = async () => {
       const settings = await Storage.getOnboardingSettings();
-      const inOnboarding = segments[0] === 'onboarding';
+      const inOnboarding = segments[0] === "(onboarding)";
 
       if (settings?.hasCompletedOnboarding) {
-        router.replace('/feed');
+        router.replace("/(tabs)/feed");
       } else if (!inOnboarding) {
-        router.replace('/onboarding/welcome');
+        router.replace("/(onboarding)/welcome");
       }
     };
 
@@ -24,7 +24,14 @@ export default function Index() {
   }, [router, segments]);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background.light }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: Colors.background.light,
+      }}
+    >
       <ActivityIndicator size="large" color={Colors.primary} />
     </View>
   );

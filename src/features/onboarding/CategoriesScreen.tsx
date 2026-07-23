@@ -51,7 +51,7 @@ export default function CategoriesScreen() {
 
   const handleContinue = async () => {
     await Storage.saveOnboardingSettings({ selectedCategories: selected });
-    router.push("/onboarding/rhythm");
+    router.push("/rhythm");
   };
 
   return (
